@@ -6,12 +6,10 @@ module predictor(
   output reg prediction
 );
 
-  reg previous_result;
-  reg [2:0] counter;
+  reg [1:0] counter = 2'b11;
  
   always @(posedge clk) begin
-    if (request) begin
-      if (result != previous_result) begin
+    if (result) begin
         if (taken) begin
           if (counter < 3)
             counter <= counter + 1;
@@ -21,14 +19,12 @@ module predictor(
             counter <= counter - 1;
         end
       end
+  end
+
+  always @(posedge clk) begin
+    if (request) begin
+      prediciton <= counter[1];
     end
-   
-    if (counter >= 2)
-      prediction <= 1'b1;
-    else if (counter <= 1)
-      prediction <= 1'b0;
-     
-    previous_result <= result;
   end
 
 endmodule
