@@ -1,4 +1,4 @@
-Thu Jun  1 06:50:42 UTC 2023
-Test 'predictor' failed for src file 'predictor.v'
-src file 'predictor.v': 0/1 tests passed
-
+Thu Jun  1 07:20:12 UTC 2023
+predictor.v:26: error: Could not find variable ``prediciton'' in ``predictor_tb.p''
+1 error(s) during elaboration.
+An error occurred when opening .vcd file '.tmp.vcd'
