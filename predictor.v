@@ -1,20 +1,34 @@
-module predictor(input wire request, result, clk, taken, output reg prediction);
+module predictor(
+  input wire request,
+  input wire result,
+  input wire clk,
+  input wire taken,
+  output reg prediction
+);
 
-parameter WIDTH = 3; 
-reg [WIDTH-1:0] counter = 0;
-
-always @(posedge clk) begin
-    if (taken) begin
-        if (counter < {{WIDTH}}'d7) 
-            counter <= counter + {{WIDTH}}'d1; 
-    end else begin
-        if (counter > {{WIDTH}}'d0)
-            counter <= counter - {{WIDTH}}'d1; 
+  reg previous_result;
+  reg [2:0] counter;
+ 
+  always @(posedge clk) begin
+    if (request) begin
+      if (result != previous_result) begin
+        if (taken) begin
+          if (counter < 3)
+            counter <= counter + 1;
+        end
+        else begin
+          if (counter > 0)
+            counter <= counter - 1;
+        end
+      end
     end
-    
-    if (counter > {{WIDTH}}'d3) 
-        prediction <= 1'b1;
-    else
-        prediction <= 1'b0;
-end
+   
+    if (counter >= 2)
+      prediction <= 1'b1;
+    else if (counter <= 1)
+      prediction <= 1'b0;
+     
+    previous_result <= result;
+  end
+
 endmodule
